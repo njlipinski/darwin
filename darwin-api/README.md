@@ -31,6 +31,10 @@ The first run takes a few minutes — the bulk Exoplanet Archive query pulls
 
 ```bash
 uvicorn darwin.api.app:app --reload
+
+OR
+
+python -m uvicorn darwin.api.app:app --reload
 ```
 
 Then visit:

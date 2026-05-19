@@ -81,7 +81,7 @@ def list_planets(
     sql = f"""
         SELECT
           p.pl_name, p.hostname, p.pl_rade, p.pl_eqt, p.sy_dist,
-          p.habitability_score, p.in_hz,
+          p.esi, p.habitability_score, p.in_hz,
           (SELECT COUNT(*) FROM spectra s WHERE s.pl_name = p.pl_name) AS n_spectra
         FROM planets p
         {where_clause}
@@ -100,6 +100,7 @@ def list_planets(
             pl_rade=r["pl_rade"],
             pl_eqt=r["pl_eqt"],
             sy_dist=r["sy_dist"],
+            esi=r["esi"],                                                       # ← NEW
             habitability_score=r["habitability_score"],
             in_hz=bool(r["in_hz"]) if r["in_hz"] is not None else None,
             has_spectrum=r["n_spectra"] > 0,

@@ -75,6 +75,13 @@ def upsert_planets(conn: sqlite3.Connection, table) -> int:
     log.info("Wrote %d planet rows", len(rows))
     return len(rows)
 
+def esi(radius_re, teq_k, radius_ref=1.0, teq_ref=288.0):
+    """Earth Similarity Index (simplified, radius+temperature only)."""
+    if radius_re is None or teq_k is None:
+        return None
+    er = 1 - abs((radius_re - radius_ref) / (radius_re + radius_ref))
+    et = 1 - abs((teq_k - teq_ref) / (teq_k + teq_ref))
+    return (er * et) ** 0.5
 
 def score_habitability(conn: sqlite3.Connection) -> int:
     """Populate in_hz, is_rocky_candidate, and habitability_score columns.
@@ -109,6 +116,17 @@ def score_habitability(conn: sqlite3.Connection) -> int:
         """,
         (ROCKY_RADIUS_MAX_REARTH,)
     )
+    
+    # ESI — Earth Similarity Index. Computed in Python because the
+    # formula isn't easily expressed in SQL.
+    rows = cur.execute(
+        "SELECT pl_name, pl_rade, pl_eqt FROM planets"
+    ).fetchall()
+    updates = [
+        (esi(r["pl_rade"], r["pl_eqt"]), r["pl_name"])
+        for r in rows
+    ]
+    cur.executemany("UPDATE planets SET esi = ? WHERE pl_name = ?", updates)
 
     # habitability_score: 1.0 only if both flags positive; 0.5 if one; 0 if neither;
     # NULL if either input is unknown.

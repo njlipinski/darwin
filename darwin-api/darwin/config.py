@@ -37,6 +37,7 @@ EA_COLUMNS = [
     "st_rad",         # stellar radius (solar radii)
     "st_mass",        # stellar mass (solar masses)
     "st_lum",         # log(stellar luminosity / L_sun)
+    "st_spectype",    # stellar spectral type
     "sy_dist",        # distance to system (pc)
     "disc_year",
     "disc_facility",

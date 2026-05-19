@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS planets (
     st_rad              REAL,    -- solar radii
     st_mass             REAL,    -- solar masses
     st_lum              REAL,    -- log10(L_sun)
+    st_spectype         TEXT,    -- spectral type (added in latest ingest)
     sy_dist             REAL,    -- pc
     disc_year           INTEGER,
     disc_facility       TEXT,
@@ -37,6 +38,7 @@ CREATE TABLE IF NOT EXISTS planets (
     in_hz               INTEGER, -- 1 if in conservative HZ, 0 if not, NULL if unknown
     is_rocky_candidate  INTEGER, -- 1 if R < threshold, 0 if not, NULL if unknown
     habitability_score  REAL,    -- 0-1, NULL if insufficient data
+    esi                 REAL,    -- Earth Similarity Index (simplified), NULL if unknown
 
     last_updated        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
